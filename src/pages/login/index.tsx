@@ -1,6 +1,7 @@
+import { useRouter } from "next/router";
 import { useState } from "react";
 
-const inputStyle = {
+export const inputStyle = {
   padding: "8px", // Adjust padding according to your preference
   borderRadius: "5px",
   border: "1px solid #ccc",
@@ -8,7 +9,7 @@ const inputStyle = {
   marginBottom: "1.5rem",
 };
 
-const buttonStyle = {
+export const buttonStyle = {
   padding: "8px 16px", // Adjust padding according to your preference
   borderRadius: "5px",
   backgroundColor: "#1677ff",
@@ -20,6 +21,7 @@ const buttonStyle = {
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
   return (
     <>
       <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
@@ -29,6 +31,8 @@ const Login = () => {
             onSubmit={(e) => {
               e.preventDefault();
               console.log(username + " " + password);
+              localStorage.setItem("token", username);
+              router.push("/");
             }}
           >
             <label

@@ -8,7 +8,7 @@ const ComponentWrapper: React.FC<any> = ({ children }) => {
           justifyContent: "center",
         }}
       >
-        <div style={{ width: "80%", marginTop: "5rem" }}>{children}</div>
+        <div style={{ width: "60%", marginTop: "5rem" }}>{children}</div>
       </div>
     </>
   );
