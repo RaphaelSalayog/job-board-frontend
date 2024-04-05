@@ -6,18 +6,19 @@ import { useState } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export interface IJobs {
+export interface IJob {
   id: string;
-  company: ICompanies;
+  company: ICompany;
   title: string;
   description: string;
   createdAt: string;
 }
 
-export interface ICompanies {
+export interface ICompany {
   id: string;
   name: string;
   description: string;
+  jobs: IJob[];
 }
 
 export const jobsData = [
@@ -41,7 +42,7 @@ export const jobsData = [
   },
 ];
 
-export default function Home({ data }: { data: IJobs[] }) {
+export default function Home({ data }: { data: IJob[] }) {
   const [jobs, setJobs] = useState(data);
   return (
     <>
@@ -57,8 +58,8 @@ export default function Home({ data }: { data: IJobs[] }) {
         }}
       >
         {jobs.map((job) => (
-          <li>
-            <Jobs key={job.id} data={job} />
+          <li key={job.id}>
+            <Jobs data={job} />
           </li>
         ))}
       </ul>
@@ -69,7 +70,7 @@ export default function Home({ data }: { data: IJobs[] }) {
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const query = `
   query {
-    jobs {
+    getAllJobs {
       id
       company {
         id
@@ -82,8 +83,9 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     }
   }
   `;
+
   try {
-    const response = await fetch("http://localhost:8080/graphql", {
+    const response = await fetch(`${process.env.API_URL}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -93,7 +95,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const { data } = await response.json();
     return {
       props: {
-        data: data.jobs,
+        data: data.getAllJobs,
       },
     };
   } catch (err) {

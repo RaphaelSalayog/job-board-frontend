@@ -1,7 +1,7 @@
-import { IJobs } from "@/pages";
+import { IJob } from "@/pages";
 import Link from "next/link";
 
-const Jobs = ({ data }: { data: IJobs }) => {
+const Jobs = ({ data }: { data: IJob }) => {
   const { id, createdAt, title, company } = data;
   return (
     <>
@@ -11,7 +11,7 @@ const Jobs = ({ data }: { data: IJobs }) => {
           href={`/jobs/${id}`}
           style={{ textDecoration: "none", color: "#1890ff" }}
         >
-          <p>{`${title} at ${company.name}`}</p>
+          <p>{company?.name ? `${title} at ${company?.name}` : title}</p>
         </Link>
       </div>
 

@@ -1,24 +1,67 @@
-import { jobsData } from "@/pages";
+import { IJob, jobsData } from "@/pages";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 const jobs = () => {
+  const [job, setJob] = useState<IJob>();
   const router = useRouter();
   const { jobId } = router.query;
 
   const jobData = jobsData.find((job) => job.id === jobId);
+
+  const fetchJob = async () => {
+    const query = `
+      query getJobById($id: ID!) {
+        getJobById(id: $id) {
+          id
+          company {
+            id
+            name
+            description
+          }
+          title
+          description
+          createdAt
+        }
+      }
+    `;
+
+    try {
+      const response = await fetch(`http://localhost:8080/graphql`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          query: query,
+          variables: {
+            id: jobId,
+          },
+        }),
+      });
+
+      const { data } = await response.json();
+      setJob(data.getJobById);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (jobId) {
+      fetchJob();
+    }
+  }, [jobId]);
+
   return (
     <>
       <div style={{ marginBottom: "1rem" }}>
-        <p style={{ fontSize: "2rem", marginBottom: "0.3rem" }}>
-          {jobData?.job}
-        </p>
+        <p style={{ fontSize: "2rem", marginBottom: "0.3rem" }}>{job?.title}</p>
         <Link
-          href={`/companies/${jobData?.company.id}`}
+          href={`/companies/${job?.company.id}`}
           style={{ textDecoration: "none", color: "#1890ff" }}
         >
           <p style={{ fontSize: "1.2rem", marginBottom: "1rem" }}>
-            {jobData?.company.name}
+            {job?.company.name}
           </p>
         </Link>
         <div
@@ -29,13 +72,8 @@ const jobs = () => {
             padding: "1.5rem",
           }}
         >
-          <p style={{ padding: "0.7rem 0" }}>{`Posted : ${jobData?.date}`}</p>
-          <p style={{ padding: "0.7rem 0" }}>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta
-            corporis ab doloremque sint cum, cumque expedita exercitationem
-            aliquid voluptates earum? Sapiente, id excepturi. Iure ratione
-            doloribus debitis ea non eveniet!
-          </p>
+          <p style={{ padding: "0.7rem 0" }}>{`Posted : ${job?.createdAt}`}</p>
+          <p style={{ padding: "0.7rem 0" }}>{job?.description}</p>
         </div>
       </div>
     </>
