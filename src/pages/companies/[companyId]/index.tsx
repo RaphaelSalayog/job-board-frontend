@@ -1,5 +1,5 @@
 import Jobs from "@/components/job-list/Jobs";
-import { ICompany, jobsData } from "@/pages";
+import { ICompany } from "@/pages";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 

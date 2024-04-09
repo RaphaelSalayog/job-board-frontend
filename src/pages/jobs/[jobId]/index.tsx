@@ -1,4 +1,4 @@
-import { IJob, jobsData } from "@/pages";
+import { IJob } from "@/pages";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -7,8 +7,6 @@ const jobs = () => {
   const [job, setJob] = useState<IJob>();
   const router = useRouter();
   const { jobId } = router.query;
-
-  const jobData = jobsData.find((job) => job.id === jobId);
 
   const fetchJob = async () => {
     const query = `

@@ -1,9 +1,11 @@
 import ComponentWrapper from "@/util/ComponentWrapper";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 const MainNavigation: React.FC<any> = ({ children }) => {
   const [isAuth, setIsAuth] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const token = localStorage?.getItem("token");
@@ -12,7 +14,7 @@ const MainNavigation: React.FC<any> = ({ children }) => {
     } else {
       setIsAuth(false);
     }
-  }, [localStorage?.getItem("token")]);
+  }, [router.pathname]);
   return (
     <>
       <nav style={{ position: "fixed", width: "100%" }}>

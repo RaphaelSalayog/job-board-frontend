@@ -21,27 +21,6 @@ export interface ICompany {
   jobs: IJob[];
 }
 
-export const jobsData = [
-  {
-    id: "123",
-    date: "21 Jan 2023",
-    job: "Job 1",
-    company: {
-      id: "c123",
-      name: "Company A",
-    },
-  },
-  {
-    id: "456",
-    date: "22 Jan 2023",
-    job: "Job 2",
-    company: {
-      id: "c456",
-      name: "Company B",
-    },
-  },
-];
-
 export default function Home({ data }: { data: IJob[] }) {
   const [jobs, setJobs] = useState(data);
   return (

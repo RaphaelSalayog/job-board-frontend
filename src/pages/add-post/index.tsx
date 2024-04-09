@@ -5,6 +5,11 @@ const addPost = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
+  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(title + " " + description);
+  };
+
   return (
     <>
       <p style={{ fontSize: "2rem", marginBottom: "1rem" }}>New Job</p>
@@ -17,12 +22,7 @@ const addPost = () => {
           listStyleType: "none",
         }}
       >
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            console.log(title + " " + description);
-          }}
-        >
+        <form onSubmit={submitHandler}>
           <label
             htmlFor="title"
             style={{
