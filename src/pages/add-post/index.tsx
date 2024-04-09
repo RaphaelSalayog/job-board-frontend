@@ -5,9 +5,44 @@ const addPost = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
-  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(title + " " + description);
+
+    const mutation = `
+      mutation createJob($input: CreateJobInput!) {
+        createJob(input: $input) {
+          id
+          company {
+            id
+            name
+            description
+          }
+          title
+          description
+          createdAt
+        }
+      }
+    `;
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          query: mutation,
+          variables: {
+            input: {
+              title: title,
+              description: description,
+            },
+          },
+        }),
+      });
+
+      const data = await response.json();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
