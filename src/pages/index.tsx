@@ -1,7 +1,6 @@
 import { Inter } from "next/font/google";
 import Jobs from "@/components/job-list/Jobs";
 import { GetServerSidePropsContext } from "next";
-import { gql } from "@apollo/client";
 import { useState } from "react";
 
 const inter = Inter({ subsets: ["latin"] });

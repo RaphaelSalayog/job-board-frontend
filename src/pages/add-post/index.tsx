@@ -1,9 +1,11 @@
+import { useRouter } from "next/router";
 import { buttonStyle, inputStyle } from "../login";
 import { useState } from "react";
 
 const addPost = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const router = useRouter();
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -40,6 +42,7 @@ const addPost = () => {
       });
 
       const data = await response.json();
+      router.push("/");
     } catch (error) {
       console.log(error);
     }
