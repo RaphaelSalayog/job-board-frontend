@@ -1,3 +1,4 @@
+import { useLoginMutation } from "@/util/graphql/api-hooks/useLogin";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -22,17 +23,22 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const { loginHandler } = useLoginMutation();
   return (
     <>
       <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
         <div style={{ width: "50%" }}>
           <p style={{ fontSize: "2rem", marginBottom: "1rem" }}>Login</p>
           <form
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
               e.preventDefault();
-              console.log(username + " " + password);
-              localStorage.setItem("token", username);
-              router.push("/");
+              try {
+                const { data } = await loginHandler(username, password);
+                localStorage.setItem("token", data.login.token);
+                router.push("/");
+              } catch (error) {
+                console.log(error);
+              }
             }}
           >
             <label
@@ -47,7 +53,7 @@ const Login = () => {
             </label>
             <input
               id="username"
-              type="email"
+              // type="email"
               style={inputStyle}
               onChange={(e) => {
                 setUsername(e.target.value);
