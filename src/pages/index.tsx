@@ -1,10 +1,6 @@
-import { Inter } from "next/font/google";
 import Jobs from "@/components/job-list/Jobs";
-import { GetServerSidePropsContext } from "next";
-import { useState } from "react";
-
-const inter = Inter({ subsets: ["latin"] });
-
+import { useGetAllJobsQuery } from "@/util/graphql/api-hooks/useGetAllJobs";
+import apolloClientInstance from "@/util/graphql/apollo-client";
 export interface IJob {
   id: string;
   company: ICompany;
@@ -20,8 +16,9 @@ export interface ICompany {
   jobs: IJob[];
 }
 
-export default function Home({ data }: { data: IJob[] }) {
-  const [jobs, setJobs] = useState(data);
+export default function Home() {
+  const { data, loading, error } = useGetAllJobsQuery();
+
   return (
     <>
       <p style={{ fontSize: "2rem", marginBottom: "1rem" }}>Job Board</p>
@@ -35,53 +32,57 @@ export default function Home({ data }: { data: IJob[] }) {
           listStyleType: "none",
         }}
       >
-        {jobs.map((job) => (
-          <li key={job.id}>
-            <Jobs data={job} />
-          </li>
-        ))}
+        {!loading ? (
+          data.getAllJobs?.map((job: IJob) => (
+            <li key={job.id}>
+              <Jobs data={job} />
+            </li>
+          ))
+        ) : (
+          <p>Loading ... </p>
+        )}
       </ul>
     </>
   );
 }
 
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  const query = `
-  query {
-    getAllJobs {
-      id
-      company {
-        id
-        name
-        description
-      }
-      title
-      description
-      createdAt
-    }
-  }
-  `;
+// export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+//   const query = `
+//   query {
+//     getAllJobs {
+//       id
+//       company {
+//         id
+//         name
+//         description
+//       }
+//       title
+//       description
+//       createdAt
+//     }
+//   }
+//   `;
 
-  try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        query: query,
-      }),
-    });
-    const { data } = await response.json();
-    return {
-      props: {
-        data: data.getAllJobs,
-      },
-    };
-  } catch (err) {
-    console.log(err);
-    return {
-      props: {
-        data: [],
-      },
-    };
-  }
-};
+//   try {
+//     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}`, {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify({
+//         query: query,
+//       }),
+//     });
+//     const { data } = await response.json();
+//     return {
+//       props: {
+//         data: data.getAllJobs,
+//       },
+//     };
+//   } catch (err) {
+//     console.log(error);
+//     return {
+//       props: {
+//         data: [],
+//       },
+//     };
+//   }
+// };

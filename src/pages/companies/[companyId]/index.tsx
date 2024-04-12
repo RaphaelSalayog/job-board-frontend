@@ -39,8 +39,8 @@ const companies = () => {
 
       const { data } = await response.json();
       setCompany(data.getCompanyById);
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error);
     }
   };
 

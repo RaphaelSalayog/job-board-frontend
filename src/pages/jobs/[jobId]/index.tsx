@@ -39,8 +39,8 @@ const jobs = () => {
 
       const { data } = await response.json();
       setJob(data.getJobById);
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error);
     }
   };
 
