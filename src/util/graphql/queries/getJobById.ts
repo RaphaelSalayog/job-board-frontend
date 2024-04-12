@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
-export const GET_ALL_JOBS_QUERY = gql`
-  query getAllJobs {
-    getAllJobs {
+export const GET_JOB_BY_ID_QUERY = gql`
+  query getJobById($id: ID!) {
+    getJobById(id: $id) {
       id
       company {
         id

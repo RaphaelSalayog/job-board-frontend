@@ -1,8 +1,8 @@
 import { useQuery } from "@apollo/client";
-import { getAllJobs } from "../queries/getAllJobs";
+import { GET_ALL_JOBS_QUERY } from "../queries/getAllJobs";
 
 export const useGetAllJobsQuery = () => {
-  const { data, loading, error } = useQuery(getAllJobs);
+  const { data, loading, error } = useQuery(GET_ALL_JOBS_QUERY);
 
   return {
     data,

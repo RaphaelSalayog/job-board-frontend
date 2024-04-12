@@ -1,14 +1,59 @@
-import { IJob } from "@/pages";
+import { useGetJobById } from "@/util/graphql/api-hooks/useGetJobById";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const jobs = () => {
-  const [job, setJob] = useState<IJob>();
   const router = useRouter();
   const { jobId } = router.query;
+  const { getJobByIdApi, data, loading, error } = useGetJobById();
+  const job = data?.getJobById;
 
-  const fetchJob = async () => {
+  useEffect(() => {
+    if (jobId) {
+      getJobByIdApi(jobId);
+    }
+  }, [jobId]);
+  return (
+    <>
+      {!loading ? (
+        <div style={{ marginBottom: "1rem" }}>
+          <p style={{ fontSize: "2rem", marginBottom: "0.3rem" }}>
+            {data?.title}
+          </p>
+          <Link
+            href={`/companies/${job?.company.id}`}
+            style={{ textDecoration: "none", color: "#1890ff" }}
+          >
+            <p style={{ fontSize: "1.2rem", marginBottom: "1rem" }}>
+              {job?.company.name}
+            </p>
+          </Link>
+          <div
+            style={{
+              border: "1px solid #d9d9d9",
+              borderRadius: "10px",
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+              padding: "1.5rem",
+            }}
+          >
+            <p
+              style={{ padding: "0.7rem 0" }}
+            >{`Posted : ${job?.createdAt}`}</p>
+            <p style={{ padding: "0.7rem 0" }}>{job?.description}</p>
+          </div>
+        </div>
+      ) : (
+        <p>Loading ...</p>
+      )}
+    </>
+  );
+};
+
+export default jobs;
+
+/*
+const fetchJob = async () => {
     const query = `
       query getJobById($id: ID!) {
         getJobById(id: $id) {
@@ -49,33 +94,4 @@ const jobs = () => {
       fetchJob();
     }
   }, [jobId]);
-
-  return (
-    <>
-      <div style={{ marginBottom: "1rem" }}>
-        <p style={{ fontSize: "2rem", marginBottom: "0.3rem" }}>{job?.title}</p>
-        <Link
-          href={`/companies/${job?.company.id}`}
-          style={{ textDecoration: "none", color: "#1890ff" }}
-        >
-          <p style={{ fontSize: "1.2rem", marginBottom: "1rem" }}>
-            {job?.company.name}
-          </p>
-        </Link>
-        <div
-          style={{
-            border: "1px solid #d9d9d9",
-            borderRadius: "10px",
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-            padding: "1.5rem",
-          }}
-        >
-          <p style={{ padding: "0.7rem 0" }}>{`Posted : ${job?.createdAt}`}</p>
-          <p style={{ padding: "0.7rem 0" }}>{job?.description}</p>
-        </div>
-      </div>
-    </>
-  );
-};
-
-export default jobs;
+*/
