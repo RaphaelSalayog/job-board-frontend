@@ -1,6 +1,5 @@
 import Jobs from "@/components/job-list/Jobs";
 import { useGetAllJobsQuery } from "@/util/graphql/api-hooks/useGetAllJobs";
-import apolloClientInstance from "@/util/graphql/apollo-client";
 export interface IJob {
   id: string;
   company: ICompany;
@@ -33,7 +32,7 @@ export default function Home() {
         }}
       >
         {!loading ? (
-          data.getAllJobs?.map((job: IJob) => (
+          data?.getAllJobs?.map((job: IJob) => (
             <li key={job.id}>
               <Jobs data={job} />
             </li>

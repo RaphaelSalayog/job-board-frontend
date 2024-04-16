@@ -5,12 +5,15 @@ import { useEffect, useState } from "react";
 
 const MainNavigation: React.FC<any> = ({ children }) => {
   const [isAuth, setIsAuth] = useState(false);
+  const [username, setUsername] = useState("");
   const router = useRouter();
 
   useEffect(() => {
     const token = localStorage?.getItem("token");
+    const username = localStorage?.getItem("username");
     if (token) {
       setIsAuth(true);
+      setUsername(username || "");
     } else {
       setIsAuth(false);
     }
@@ -37,7 +40,7 @@ const MainNavigation: React.FC<any> = ({ children }) => {
           <div style={{ display: "flex" }}>
             {isAuth && (
               <>
-                <p style={{ marginRight: "3rem" }}>Raphael</p>
+                <p style={{ marginRight: "3rem" }}>{username}</p>
                 <li key={"addPost"} style={{ marginRight: "3rem" }}>
                   <Link
                     href={"/add-post"}

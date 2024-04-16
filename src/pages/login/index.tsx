@@ -35,6 +35,7 @@ const Login = () => {
               try {
                 const { data } = await loginHandler(username, password);
                 localStorage.setItem("token", data.login.token);
+                localStorage.setItem("username", data.login.username);
                 router.push("/");
               } catch (error) {
                 console.log(error);
