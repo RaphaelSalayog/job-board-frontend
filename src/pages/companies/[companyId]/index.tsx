@@ -1,52 +1,18 @@
 import Jobs from "@/components/job-list/Jobs";
 import { ICompany } from "@/pages";
+import { useGetCompanyById } from "@/util/graphql/api-hooks/useGetCompanyById";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const companies = () => {
-  const [company, setCompany] = useState<ICompany | null>();
+  const { getCompanyByIdApi, data, loading, error } = useGetCompanyById();
+  const company = data?.getCompanyById as ICompany;
   const router = useRouter();
   const { companyId } = router.query;
 
-  const fetchJob = async () => {
-    const query = `
-    query getCompanyById($id: ID!) {
-      getCompanyById(id: $id) {
-        id
-        name
-        description
-        jobs  {
-          id
-          title
-          description
-          createdAt
-        }
-      }
-    }
-    `;
-
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          query: query,
-          variables: {
-            id: companyId,
-          },
-        }),
-      });
-
-      const { data } = await response.json();
-      setCompany(data.getCompanyById);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     if (companyId) {
-      fetchJob();
+      getCompanyByIdApi(companyId);
     }
   }, [companyId]);
 
@@ -86,3 +52,39 @@ const companies = () => {
 };
 
 export default companies;
+
+// const fetchJob = async () => {
+//   const query = `
+//   query getCompanyById($id: ID!) {
+//     getCompanyById(id: $id) {
+//       id
+//       name
+//       description
+//       jobs  {
+//         id
+//         title
+//         description
+//         createdAt
+//       }
+//     }
+//   }
+//   `;
+
+//   try {
+//     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}`, {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify({
+//         query: query,
+//         variables: {
+//           id: companyId,
+//         },
+//       }),
+//     });
+
+//     const { data } = await response.json();
+//     setCompany(data.getCompanyById);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
