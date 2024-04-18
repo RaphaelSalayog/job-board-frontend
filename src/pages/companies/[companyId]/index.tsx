@@ -2,20 +2,22 @@ import Jobs from "@/components/job-list/Jobs";
 import { ICompany } from "@/pages";
 import { useGetCompanyById } from "@/util/graphql/api-hooks/useGetCompanyById";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 const companies = () => {
-  const { getCompanyByIdApi, data, loading, error } = useGetCompanyById();
-  const company = data?.getCompanyById as ICompany;
   const router = useRouter();
   const { companyId } = router.query;
+  const { data, loading, error } = useGetCompanyById(companyId);
+  const company = data?.getCompanyById as ICompany;
 
-  useEffect(() => {
-    if (companyId) {
-      getCompanyByIdApi(companyId);
-    }
-  }, [companyId]);
+  // useEffect(() => {
+  //   if (companyId) {
+  //     getCompanyByIdApi(companyId);
+  //   }
+  // }, [companyId]);
 
+  if (loading) {
+    return <>Loading ....</>;
+  }
   return (
     <>
       <p style={{ fontSize: "2rem", marginBottom: "1rem" }}>{company?.name}</p>

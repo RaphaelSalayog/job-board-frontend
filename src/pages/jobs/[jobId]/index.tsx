@@ -6,14 +6,14 @@ import { useEffect } from "react";
 const jobs = () => {
   const router = useRouter();
   const { jobId } = router.query;
-  const { getJobByIdApi, data, loading, error } = useGetJobById();
+  const { data, loading, error } = useGetJobById(jobId);
   const job = data?.getJobById;
 
-  useEffect(() => {
-    if (jobId) {
-      getJobByIdApi(jobId);
-    }
-  }, [jobId]);
+  // useEffect(() => {
+  //   if (jobId) {
+  //     getJobByIdApi(jobId);
+  //   }
+  // }, [jobId]);
   return (
     <>
       {!loading ? (
