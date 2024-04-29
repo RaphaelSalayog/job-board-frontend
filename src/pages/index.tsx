@@ -22,6 +22,7 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState(1);
   const offset = (currentPage - 1) * JOBS_PER_PAGE; // offset - what index should it start (currentPage - 1 * limit)
   const { data, loading, error } = useGetAllJobsQuery(JOBS_PER_PAGE, offset);
+  const totalPages = Math.ceil(data?.getAllJobs.totalCount / JOBS_PER_PAGE); // Math.ceil() rounds a number up to the next largest integer. (e.g. 3.2 = 4) it round off even the .2 is not >= .5
 
   return (
     <>
@@ -56,6 +57,7 @@ export default function Home() {
           onClick={() => {
             setCurrentPage((prevState) => prevState + 1);
           }}
+          disabled={currentPage === totalPages}
           style={{
             padding: "5px 10px",
             borderRadius: "5px",
@@ -78,7 +80,7 @@ export default function Home() {
         }}
       >
         {!loading ? (
-          data?.getAllJobs?.map((job: IJob) => (
+          data?.getAllJobs?.jobs.map((job: IJob) => (
             <li key={job.id}>
               <Jobs data={job} />
             </li>
