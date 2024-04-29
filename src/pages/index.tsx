@@ -16,7 +16,7 @@ export interface ICompany {
   jobs: IJob[];
 }
 
-const JOBS_PER_PAGE = 2;
+const JOBS_PER_PAGE = 5;
 
 export default function Home() {
   const [currentPage, setCurrentPage] = useState(1);

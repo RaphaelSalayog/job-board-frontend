@@ -1,4 +1,5 @@
 import { IJob } from "@/pages";
+import moment from "moment";
 import Link from "next/link";
 
 const Jobs = ({ data }: { data: IJob }) => {
@@ -6,7 +7,9 @@ const Jobs = ({ data }: { data: IJob }) => {
   return (
     <>
       <div style={{ display: "flex", padding: "0.7rem 0" }}>
-        <p style={{ marginRight: "1rem" }}>{createdAt}</p>
+        <p style={{ marginRight: "1rem" }}>
+          {moment(createdAt).format("DD MMM YYYY")}
+        </p>
         <Link
           href={`/jobs/${id}`}
           style={{ textDecoration: "none", color: "#1890ff" }}

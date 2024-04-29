@@ -7,13 +7,13 @@ const addPost = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const router = useRouter();
-  const { createJobHandler, data, error } = useCreateJob();
+  const { createJobHandler } = useCreateJob();
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const input = { title, description };
-    createJobHandler(input);
-    if (!error) {
+    const result = await createJobHandler(input);
+    if (result) {
       router.push("/");
     }
   };

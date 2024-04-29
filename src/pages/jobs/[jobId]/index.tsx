@@ -1,12 +1,12 @@
 import { useGetJobById } from "@/util/graphql/api-hooks/useGetJobById";
+import moment from "moment";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 const jobs = () => {
   const router = useRouter();
   const { jobId } = router.query;
-  const { data, loading, error } = useGetJobById(jobId);
+  const { data, loading } = useGetJobById(jobId);
   const job = data?.getJobById;
 
   // useEffect(() => {
@@ -37,9 +37,9 @@ const jobs = () => {
               padding: "1.5rem",
             }}
           >
-            <p
-              style={{ padding: "0.7rem 0" }}
-            >{`Posted : ${job?.createdAt}`}</p>
+            <p style={{ padding: "0.7rem 0" }}>{`Posted : ${moment(
+              job?.createdAt
+            ).format("DD MMM YYYY")}`}</p>
             <p style={{ padding: "0.7rem 0" }}>{job?.description}</p>
           </div>
         </div>
